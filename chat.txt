@@ -277,3 +277,24 @@ public async Task<IActionResult> OnGetAsync()
 <p>Date: @ViewData["Date"]</p>
 <p>User name: @ViewData["UserName"]</p>
 <p>User given name: @ViewData["UserGivenName"]</p>
+
+
+
+@page
+@model LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+<h2>@ViewData["Title"]</h2>
+<form method="post">
+    <div>
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required />
+    </div>
+    <div>
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" required />
+    </div>
+    <button type="submit">Login</button>
+</form>
+
