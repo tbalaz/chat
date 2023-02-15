@@ -298,3 +298,75 @@ public async Task<IActionResult> OnGetAsync()
     <button type="submit">Login</button>
 </form>
 
+
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.DirectoryServices.AccountManagement;
+
+namespace poc.Pages
+{
+    public class WelcomeModel : PageModel
+    {
+        [BindProperty(SupportsGet = true)]
+        public string Username { get; set; }
+
+        public string GivenName { get; set; }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userPrincipal = UserPrincipal.FindByIdentity(new PrincipalContext(ContextType.Domain, "sfac.preprod"), User.Identity.Name);
+                ViewData["Title"] = "Welcome";
+                ViewData["Date"] = DateTime.Now;
+                //ViewData["UserName"] = User.Identity.Name;
+                //ViewData["UserGivenName"] = userPrincipal.GivenName;
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("/Login");
+            }
+        }
+    }
+}
+
+
+
+
+
+
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.DirectoryServices.AccountManagement;
+
+namespace poc.Pages
+{
+    public class WelcomeModel : PageModel
+    {
+        [BindProperty(SupportsGet = true)]
+        public string Username { get; set; }
+
+        public string GivenName { get; set; }
+
+        public async Task<IActionResult> OnGetAsync()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var userPrincipal = UserPrincipal.FindByIdentity(new PrincipalContext(ContextType.Domain, "sfac.preprod"), User.Identity.Name);
+                ViewData["Title"] = "Welcome";
+                ViewData["Date"] = DateTime.Now;
+                //ViewData["UserName"] = User.Identity.Name;
+                //ViewData["UserGivenName"] = userPrincipal.GivenName;
+                return Page();
+            }
+            else
+            {
+                return RedirectToPage("/Login");
+            }
+        }
+    }
+}
