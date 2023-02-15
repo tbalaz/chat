@@ -34,3 +34,15 @@ namespace poc.Pages
         }
     }
 }
+
+
+@page "{Username}"
+@model poc.Pages.WelcomeModel
+
+<h1>Welcome</h1>
+
+<p>Current Date and Time: @DateTime.Now</p>
+
+<p>Username: @Model.Username</p>
+
+<p>User Given Name: @Model.GivenName</p>
