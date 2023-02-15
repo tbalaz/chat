@@ -46,3 +46,45 @@ namespace poc.Pages
 <p>Username: @Model.Username</p>
 
 <p>User Given Name: @Model.GivenName</p>
+
+
+
+using System;
+using System.DirectoryServices.AccountManagement;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace poc.Pages
+{
+    public class WelcomeModel : PageModel
+    {
+        [BindProperty(SupportsGet = true)]
+        public string Username { get; set; }
+
+        public string GivenName { get; set; }
+
+        public IActionResult OnGet()
+        {
+            try
+            {
+                using (var context = new PrincipalContext(ContextType.Domain, "sfac.preprod"))
+                {
+                    var userPrincipal = UserPrincipal.FindByIdentity(context, IdentityType.SamAccountName, Username);
+
+                    if (userPrincipal != null)
+                    {
+                        GivenName = userPrincipal.GivenName;
+                        return Page();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log the error
+            }
+
+            return RedirectToPage("/Index");
+        }
+    }
+}
+
