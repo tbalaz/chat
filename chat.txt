@@ -174,3 +174,57 @@ namespace poc.Pages
         }
     }
 }
+
+
+
+
+public async Task<IActionResult> OnPostAsync()
+{
+    var username = Input.Username;
+    var password = Input.Password;
+    var domainName = "sfac.preprod"; // Replace with your domain name
+
+    var ldapPath = $"LDAP://{domainName}";
+    var domainAndUsername = $"{domainName}\\{username}";
+    var entry = new DirectoryEntry(ldapPath, domainAndUsername, password);
+
+    try
+    {
+        // Bind to the native AdsObject to force authentication
+        var obj = entry.NativeObject;
+        var search = new DirectorySearcher(entry);
+
+        search.Filter = $"(sAMAccountName={username})";
+        search.PropertiesToLoad.Add("givenName");
+
+        var result = search.FindOne();
+
+        if (result == null)
+        {
+            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            return Page();
+        }
+        else
+        {
+            var givenName = result.Properties["givenName"][0].ToString();
+
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Name, username),
+                new Claim(ClaimTypes.GivenName, givenName),
+            };
+
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
+
+            return RedirectToPage("/Welcome");
+        }
+    }
+    catch
+    {
+        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+        return Page();
+    }
+}
+
