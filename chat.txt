@@ -1,0 +1,36 @@
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+
+namespace poc.Pages
+{
+    public class LoginModel : PageModel
+    {
+        [BindProperty]
+        [Required(ErrorMessage = "Please enter your username.")]
+        public string Username { get; set; }
+
+        [BindProperty]
+        [Required(ErrorMessage = "Please enter your password.")]
+        [DataType(DataType.Password)]
+        public string Password { get; set; }
+
+        public IActionResult OnGet()
+        {
+            return Page();
+        }
+
+        public IActionResult OnPost()
+        {
+            if (ModelState.IsValid)
+            {
+                // TODO: Authenticate the user against Active Directory.
+
+                // Redirect the user to the Welcome page if authentication is successful.
+                return RedirectToPage("/Welcome", new { Username = Username });
+            }
+
+            return Page();
+        }
+    }
+}
