@@ -228,3 +228,52 @@ public async Task<IActionResult> OnPostAsync()
     }
 }
 
+public async Task<IActionResult> OnGetAsync()
+{
+    if (User.Identity.IsAuthenticated)
+    {
+        var userPrincipal = UserPrincipal.FindByIdentity(new PrincipalContext(ContextType.Domain, "sfac.preprod"), User.Identity.Name);
+        ViewData["Title"] = "Welcome";
+        ViewData["Date"] = DateTime.Now;
+        ViewData["UserName"] = User.Identity.Name;
+        ViewData["UserGivenName"] = userPrincipal.GivenName;
+        return Page();
+    }
+    else
+    {
+        return RedirectToPage("/Login");
+    }
+}
+
+
+
+
+
+public async Task<IActionResult> OnGetAsync()
+{
+    if (User.Identity.IsAuthenticated)
+    {
+        var userPrincipal = UserPrincipal.FindByIdentity(new PrincipalContext(ContextType.Domain, "sfac.preprod"), User.Identity.Name);
+        ViewData["Title"] = "Welcome";
+        ViewData["Date"] = DateTime.Now;
+        ViewData["UserName"] = User.Identity.Name;
+        ViewData["UserGivenName"] = userPrincipal.GivenName;
+        return Page();
+    }
+    else
+    {
+        return RedirectToPage("/Login");
+    }
+}
+
+
+
+@page
+@model POC.Pages.WelcomeModel
+@{
+    ViewData["Title"] = "Welcome";
+}
+<h1>@ViewData["Title"]</h1>
+<p>Date: @ViewData["Date"]</p>
+<p>User name: @ViewData["UserName"]</p>
+<p>User given name: @ViewData["UserGivenName"]</p>
